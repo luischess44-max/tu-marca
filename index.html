@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marca Segura MX — Revisa tu marca antes de registrarla en el IMPI</title>
+<meta name="description" content="Revisa antecedentes de tu marca y obtén un análisis de qué tan probable es que el IMPI la registre, antes de pagar la solicitud.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖋️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --ink:#12172B;
+    --ink-soft:#2A2F45;
+    --paper:#E9ECE7;
+    --paper-raised:#F5F6F2;
+    --brass:#B8933F;
+    --brass-dark:#8C6D2C;
+    --line:rgba(18,23,43,0.16);
+    --text-muted:#565B6E;
+    --verdict-alta:#3F7A5B;
+    --verdict-alta-bg:#E4EEE8;
+    --verdict-media:#9C6E24;
+    --verdict-media-bg:#F1E6D2;
+    --verdict-baja:#A23B32;
+    --verdict-baja-bg:#F3E1DE;
+    --radius-sm:4px;
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Archivo', -apple-system, Segoe UI, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-force-light]){
+      --paper:#181C2B; --paper-raised:#1F2436; --ink:#EDEDE3; --ink-soft:#C9CBD8;
+      --line:rgba(237,237,227,0.16); --text-muted:#A6A9BC;
+      --verdict-alta-bg:#1D2E26; --verdict-media-bg:#2E2718; --verdict-baja-bg:#301F1C;
+    }
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:16px; line-height:1.55;
+  }
+  h1,h2,h3{font-family:var(--serif); color:var(--ink); font-weight:600; line-height:1.15; margin:0 0 0.5em;}
+  p{margin:0 0 1em; color:var(--ink-soft); max-width:64ch;}
+  a{color:var(--brass-dark);}
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
+
+  /* ============ HEADER ============ */
+  header.site{
+    background:var(--ink); color:var(--paper); padding:18px 0; border-bottom:3px solid var(--brass);
+  }
+  header.site .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .brand{font-family:var(--serif); font-weight:600; font-size:1.15rem; color:var(--paper); text-decoration:none;}
+  .brand span{color:var(--brass);}
+  nav.site a{color:var(--paper); text-decoration:none; margin-left:22px; font-size:0.92rem; opacity:0.85;}
+  nav.site a:hover{opacity:1; text-decoration:underline;}
+
+  /* ============ HERO ============ */
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:2.15rem; max-width:16ch;}
+  .hero p.lead{font-size:1.1rem; max-width:52ch;}
+  .btn{
+    display:inline-block; font-family:var(--sans); font-weight:600; font-size:0.98rem;
+    padding:12px 22px; border-radius:var(--radius-sm); text-decoration:none; border:1.5px solid var(--ink);
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--ink); color:var(--paper);}
+  .btn-primary:hover{background:var(--brass-dark); border-color:var(--brass-dark); color:#fff;}
+  .btn-ghost{background:transparent; color:var(--ink); border:1.5px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--ink);}
+  .disclaimer-strip{
+    margin-top:20px; padding:12px 16px; background:var(--paper-raised); border-left:3px solid var(--brass);
+    font-size:0.88rem; color:var(--text-muted); border-radius:0 var(--radius-sm) var(--radius-sm) 0; max-width:60ch;
+  }
+
+  /* ============ AD SLOT ============ */
+  .ad-slot{
+    margin:28px 0; padding:14px; border:1px dashed var(--line); border-radius:var(--radius-sm);
+    text-align:center; font-size:0.78rem; color:var(--text-muted); background:var(--paper-raised);
+  }
+
+  /* ============ DOSSIER / TOOL ============ */
+  .dossier{margin:48px 0; border:1px solid var(--line); border-radius:var(--radius-sm); background:var(--paper-raised); overflow:hidden;}
+  .dossier-head{padding:22px 24px 0;}
+  .tabs{display:flex; gap:2px; margin:18px 24px 0; border-bottom:1px solid var(--line);}
+  .tab-btn{
+    font-family:var(--sans); font-size:0.92rem; font-weight:600; color:var(--text-muted);
+    background:transparent; border:none; border-bottom:3px solid transparent; padding:12px 14px 10px;
+    cursor:pointer;
+  }
+  .tab-btn[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--brass);}
+  .tab-panel{padding:24px; display:none;}
+  .tab-panel.active{display:block;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-weight:600; font-size:0.9rem; margin-bottom:6px;}
+  .field .hint{font-size:0.82rem; color:var(--text-muted); margin-top:4px;}
+  input[type="text"], input[type="password"], select, textarea{
+    width:100%; font-family:var(--sans); font-size:0.96rem; padding:10px 12px;
+    border:1.5px solid var(--line); border-radius:var(--radius-sm); background:var(--paper); color:var(--ink);
+  }
+  input:focus, select:focus, textarea:focus{outline:2px solid var(--brass); outline-offset:1px; border-color:var(--brass);}
+  textarea{resize:vertical; min-height:80px;}
+
+  .gcse-box{padding:14px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-sm);}
+
+  /* ============ RESULT PANEL ============ */
+  .result{margin-top:26px; padding-top:22px; border-top:1px solid var(--line); display:none;}
+  .result.show{display:block;}
+  .verdict-row{display:flex; align-items:center; gap:20px; flex-wrap:wrap;}
+  .stamp{
+    width:108px; height:108px; border-radius:50%; border:4px double currentColor;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transform:rotate(-4deg); flex-shrink:0; font-family:var(--sans);
+  }
+  .stamp b{font-size:1.05rem; letter-spacing:0.03em;}
+  .stamp small{font-size:0.6rem; letter-spacing:0.08em; margin-top:2px;}
+  .stamp.alta{color:var(--verdict-alta); background:var(--verdict-alta-bg);}
+  .stamp.media{color:var(--verdict-media); background:var(--verdict-media-bg);}
+  .stamp.baja{color:var(--verdict-baja); background:var(--verdict-baja-bg);}
+  .verdict-text h3{margin-bottom:4px;}
+  ul.findings{padding-left:20px; margin:16px 0;}
+  ul.findings li{margin-bottom:8px; color:var(--ink-soft);}
+  table.similares{width:100%; border-collapse:collapse; margin-top:14px; font-size:0.9rem;}
+  table.similares th, table.similares td{text-align:left; padding:8px 6px; border-bottom:1px solid var(--line);}
+  .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px;}
+  .dot.alta{background:var(--verdict-baja);} .dot.media{background:var(--verdict-media);} .dot.baja{background:var(--verdict-alta);}
+  .result-disclaimer{font-size:0.82rem; color:var(--text-muted); margin-top:14px;}
+
+  /* ============ AI PANEL ============ */
+  .ai-output{
+    margin-top:16px; padding:16px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-sm);
+    white-space:pre-wrap; font-size:0.92rem; color:var(--ink-soft); display:none; max-height:520px; overflow-y:auto;
+  }
+  .ai-output.show{display:block;}
+  .ai-status{font-size:0.85rem; color:var(--text-muted); margin-top:8px;}
+  details.advanced-note{margin-top:10px; font-size:0.85rem; color:var(--text-muted);}
+  details.advanced-note summary{cursor:pointer; font-weight:600;}
+
+  /* ============ SERVICES DIRECTORY ============ */
+  .services{margin:56px 0;}
+  .service-row{
+    display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+    padding:16px 0; border-bottom:1px solid var(--line);
+  }
+  .service-row:first-of-type{border-top:1px solid var(--line);}
+  .service-row h3{font-size:1rem; margin:0 0 4px;}
+  .service-row p{margin:0; font-size:0.9rem;}
+  .service-row a.go{white-space:nowrap; font-size:0.88rem; font-weight:600; text-decoration:none;}
+
+  /* ============ FAQ ============ */
+  .faq{margin:56px 0;}
+  .faq-item{padding:16px 0; border-bottom:1px solid var(--line);}
+  .faq-item h3{font-size:1rem; margin-bottom:6px;}
+  .faq-item p{font-size:0.94rem;}
+
+  footer.site{background:var(--ink); color:var(--text-muted); padding:32px 0; margin-top:48px; font-size:0.85rem;}
+  footer.site a{color:var(--brass);}
+  footer.site .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+
+  .sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#top">Marca <span>Segura</span> MX</a>
+    <nav class="site">
+      <a href="#herramienta">Revisar mi marca</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#legal">Aviso legal</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+
+    <section class="hero">
+      <h1>Antes de registrar tu marca, entérate si el nombre ya existe.</h1>
+      <p class="lead">Un vistazo a los antecedentes en el IMPI y un análisis de qué tan probable es que tu marca logre registrarse — antes de pagar la solicitud oficial.</p>
+      <a href="#herramienta" class="btn btn-primary">Revisar mi marca</a>
+      <div class="disclaimer-strip">
+        Marca Segura MX es una herramienta independiente hecha por terceros. No es un sitio oficial del IMPI ni del gobierno de México, y no sustituye una búsqueda formal de anterioridades.
+      </div>
+    </section>
+
+    <!-- AD SLOT 1: reemplaza este bloque con tu script de Google AdSense (o el de tu red de anuncios) una vez aprobada la cuenta -->
+    <div class="ad-slot" id="ad-slot-top">
+      Espacio publicitario — configura tu ID de AdSense en el código (ver README)
+      <!--
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+    </div>
+
+    <section class="dossier" id="herramienta">
+      <div class="dossier-head">
+        <h2>El expediente de tu marca</h2>
+        <p>Sigue los tres pasos. Puedes usar solo el primero, o completar los tres para un análisis más completo.</p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Pasos de revisión">
+        <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-buscar" id="tab-buscar">1. Buscar antecedentes</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-evaluar" id="tab-evaluar">2. Evaluar viabilidad</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-ia" id="tab-ia">3. Análisis con IA (opcional)</button>
+      </div>
+
+      <div class="tab-panel active" id="panel-buscar" role="tabpanel" aria-labelledby="tab-buscar">
+        <p>Escribe el nombre que quieres registrar y revisa si ya aparece en el sitio del IMPI o en la Gaceta de la Propiedad Industrial.</p>
+        <div class="gcse-box">
+          <!--
+            Crea gratis un "Programmable Search Engine" en https://programmablesearchengine.google.com,
+            limítalo a los sitios impi.gob.mx y gaceta.impi.gob.mx, copia tu "cx" y pégalo abajo
+            reemplazando TU_CX_AQUI (en las dos líneas marcadas).
+          -->
+          <div class="gcse-searchbox-only" data-resultsUrl="#panel-buscar" data-newWindow="true"></div>
+        </div>
+        <div class="gcse-searchresults-only" style="margin-top:12px;"></div>
+        <script async src="https://cse.google.com/cse.js?cx=TU_CX_AQUI"></script>
+        <p class="hint">Este buscador manda tu consulta a Google, acotada a los dominios que configures. No pasa por ningún servidor de Marca Segura MX.</p>
+      </div>
+
+      <div class="tab-panel" id="panel-evaluar" role="tabpanel" aria-labelledby="tab-evaluar">
+        <p>Este análisis corre por completo en tu navegador: no se envía a ningún servidor.</p>
+        <form id="form-evaluar">
+          <div class="field">
+            <label for="in-nombre">Nombre de la marca</label>
+            <input type="text" id="in-nombre" placeholder="Ej. Lunaria" required>
+          </div>
+          <div class="field">
+            <label for="in-clase">Clase de Niza</label>
+            <select id="in-clase"></select>
+            <div class="hint">Elige la clase que mejor describe tus productos o servicios.</div>
+          </div>
+          <div class="field">
+            <label for="in-desc">Descripción de productos o servicios</label>
+            <textarea id="in-desc" placeholder="Ej. Ropa deportiva para mujer, venta en línea y tienda física"></textarea>
+          </div>
+          <div class="field">
+            <label for="in-similares">Marcas parecidas que ya encontraste (opcional)</label>
+            <textarea id="in-similares" placeholder="Pega aquí, una por línea, nombres que hayas visto en el paso 1"></textarea>
+            <div class="hint">Una marca por línea. El análisis compara la pronunciación aproximada, no solo la ortografía.</div>
+          </div>
+          <button type="submit" class="btn btn-primary">Analizar viabilidad</button>
+        </form>
+
+        <div class="result" id="resultado">
+          <div class="verdict-row">
+            <div class="stamp" id="stamp"><b id="stamp-text">—</b><small>PROBABILIDAD</small></div>
+            <div class="verdict-text">
+              <h3 id="verdict-title">Resultado</h3>
+              <p id="verdict-sub" style="margin:0;"></p>
+            </div>
+          </div>
+          <h3 style="margin-top:20px; font-size:1rem;">Por qué</h3>
+          <ul class="findings" id="findings-list"></ul>
+          <h3 style="font-size:1rem;">Recomendaciones</h3>
+          <ul class="findings" id="recs-list"></ul>
+          <div id="similares-wrap"></div>
+          <p class="result-disclaimer">Esto es una orientación automatizada con reglas generales de distintividad y similitud fonética. No es un dictamen jurídico ni sustituye una búsqueda oficial de anterioridades ante el IMPI.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-ia" role="tabpanel" aria-labelledby="tab-ia">
+        <p>Genera un reporte más detallado usando un modelo de IA con búsqueda web. Esta función es opcional y corre directamente desde tu navegador hacia la API de Anthropic, usando tu propia cuenta.</p>
+        <div class="field">
+          <label for="in-apikey">Tu API key de Anthropic</label>
+          <input type="password" id="in-apikey" placeholder="sk-ant-...">
+          <div class="hint">Se guarda solo en tu navegador (localStorage). Nunca se sube a este repositorio ni pasa por ningún servidor de Marca Segura MX — viaja directo de tu navegador a Anthropic.</div>
+        </div>
+        <details class="advanced-note">
+          <summary>Por qué se te pide una API key y qué riesgo tiene</summary>
+          <p style="margin-top:8px;">Este sitio es 100% estático (GitHub Pages), así que no hay ningún servidor propio donde esconder una llave. Cualquiera que abra las herramientas de desarrollador de su navegador durante el uso podría ver su propia key en la petición de red — por eso se usa el patrón "trae tu propia key": cada persona usa la suya, bajo su propio riesgo y límite de gasto. Si más adelante quieres ocultarla del todo, necesitarás mover esta parte a una función serverless (Cloudflare Workers, Vercel, Netlify) que guarde la key en el servidor.</p>
+        </details>
+        <button type="button" class="btn btn-primary" id="btn-ia" style="margin-top:16px;">Generar análisis con IA</button>
+        <p class="ai-status" id="ai-status"></p>
+        <div class="ai-output" id="ai-output"></div>
+      </div>
+    </section>
+
+    <!-- AD SLOT 2 -->
+    <div class="ad-slot" id="ad-slot-mid">
+      Espacio publicitario — segundo bloque (ver README)
+    </div>
+
+    <section class="services" id="servicios">
+      <h2>Servicios que pueden ayudarte después</h2>
+      <p>Directorio editable. Reemplaza cada enlace con tu programa de afiliados real antes de publicar.</p>
+
+      <div class="service-row">
+        <div>
+          <h3>Agentes de la propiedad industrial certificados</h3>
+          <p>Para presentar la solicitud formal ante el IMPI y responder oficios.</p>
+        </div>
+        <a class="go" href="#" target="_blank" rel="noopener sponsored"><!-- TODO: enlace de afiliado --> Ver directorio</a>
+      </div>
+      <div class="service-row">
+        <div>
+          <h3>Diseño de logotipo e identidad de marca</h3>
+          <p>Útil si tu nombre resultó "descriptivo" y conviene reforzarlo con un diseño distintivo.</p>
+        </div>
+        <a class="go" href="#" target="_blank" rel="noopener sponsored"><!-- TODO: enlace de afiliado --> Ver opciones</a>
+      </div>
+      <div class="service-row">
+        <div>
+          <h3>Registro de dominio y redes a nombre de tu marca</h3>
+          <p>Asegura tu nombre en línea mientras avanza el trámite ante el IMPI.</p>
+        </div>
+        <a class="go" href="#" target="_blank" rel="noopener sponsored"><!-- TODO: enlace de afiliado --> Buscar dominio</a>
+      </div>
+      <div class="service-row">
+        <div>
+          <h3>Plantillas legales (licencia y cesión de marca)</h3>
+          <p>Para cuando ya tengas el registro y quieras licenciarlo o cederlo.</p>
+        </div>
+        <a class="go" href="#" target="_blank" rel="noopener sponsored"><!-- TODO: enlace de afiliado --> Ver plantillas</a>
+      </div>
+    </section>
+
+    <section class="faq" id="legal">
+      <h2>Antes de continuar</h2>
+      <div class="faq-item">
+        <h3>¿Esto sustituye una búsqueda oficial en el IMPI?</h3>
+        <p>No. Es una orientación previa. La única búsqueda de anterioridades con valor legal es la que se hace directamente en MARCANET o a través de un agente de la propiedad industrial autorizado.</p>
+      </div>
+      <div class="faq-item">
+        <h3>¿A dónde va la información que escribo?</h3>
+        <p>El análisis del paso 2 corre en tu propio navegador y no se envía a ningún lado. El buscador del paso 1 manda tu consulta a Google. El análisis con IA del paso 3 (opcional) se envía directamente de tu navegador a Anthropic, usando tu propia API key.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Mi resultado salió "Baja" o "Media", ¿qué hago?</h3>
+        <p>Considera ajustar el nombre, acotar la descripción de productos o servicios, o registrar variantes. Antes de presentar la solicitud, conviene que un agente de la propiedad industrial certificado revise tu caso.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Aviso legal</h3>
+        <p>Marca Segura MX no está afiliado al Instituto Mexicano de la Propiedad Industrial ni a ningún organismo de gobierno. El contenido de este sitio es informativo y no constituye asesoría legal.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Marca Segura MX — herramienta independiente, no afiliada al IMPI.</span>
+    <span><a href="#" target="_blank" rel="noopener">Código en GitHub</a> · © <span id="year"></span></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============ AÑO EN FOOTER ============ */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ============ TABS ============ */
+  var tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.setAttribute('aria-selected','false'); });
+      document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+      tab.setAttribute('aria-selected','true');
+      document.getElementById(tab.getAttribute('aria-controls')).classList.add('active');
+    });
+  });
+
+  /* ============ CLASES DE NIZA ============ */
+  var CLASES = [
+    [1,"Productos químicos industriales"],[2,"Pinturas y barnices"],[3,"Cosméticos y productos de limpieza"],
+    [4,"Aceites, combustibles y velas"],[5,"Productos farmacéuticos"],[6,"Metales comunes"],
+    [7,"Máquinas y herramientas mecánicas"],[8,"Herramientas manuales"],[9,"Aparatos electrónicos y software"],
+    [10,"Instrumentos médicos"],[11,"Iluminación y climatización"],[12,"Vehículos"],
+    [13,"Armas de fuego y municiones"],[14,"Joyería y metales preciosos"],[15,"Instrumentos musicales"],
+    [16,"Papel, cartón e impresos"],[17,"Caucho y materiales aislantes"],[18,"Cuero, maletas y paraguas"],
+    [19,"Materiales de construcción no metálicos"],[20,"Muebles"],[21,"Utensilios domésticos"],
+    [22,"Cuerdas, redes y textiles crudos"],[23,"Hilos para uso textil"],[24,"Textiles y ropa de cama"],
+    [25,"Ropa, calzado y sombrerería"],[26,"Encajes, cintas y mercería"],[27,"Alfombras y revestimientos de piso"],
+    [28,"Juegos y juguetes"],[29,"Carnes, lácteos y alimentos procesados"],[30,"Café, harinas, panadería y condimentos"],
+    [31,"Productos agrícolas y plantas vivas"],[32,"Cervezas y bebidas sin alcohol"],[33,"Bebidas alcohólicas"],
+    [34,"Tabaco y artículos para fumadores"],[35,"Publicidad y gestión de negocios"],[36,"Servicios financieros e inmobiliarios"],
+    [37,"Construcción y reparación"],[38,"Telecomunicaciones"],[39,"Transporte y almacenamiento"],
+    [40,"Tratamiento de materiales"],[41,"Educación y entretenimiento"],[42,"Servicios científicos y tecnológicos"],
+    [43,"Restaurantes y alojamiento temporal"],[44,"Servicios médicos y de belleza"],[45,"Servicios legales y de seguridad"]
+  ];
+  var selClase = document.getElementById('in-clase');
+  CLASES.forEach(function(c){
+    var opt = document.createElement('option');
+    opt.value = c[0];
+    opt.textContent = c[0] + ' — ' + c[1];
+    selClase.appendChild(opt);
+  });
+
+  /* ============ MOTOR HEURÍSTICO (sin IA, corre local) ============ */
+  var GENERIC_BY_GROUP = {
+    moda: ["ropa","moda","textil","prendas","calzado","zapatos","boutique","fashion","vestir"],
+    comida: ["restaurante","comida","cocina","sabor","alimentos","food","cafe","cafeteria","antojitos","taqueria","panaderia"],
+    tech: ["tech","tecnologia","software","app","digital","sistemas","datos","web"],
+    belleza: ["belleza","spa","estetica","salon","piel","crema","cosmeticos"],
+    salud: ["salud","clinica","medico","farmacia","bienestar","dental"],
+    construccion: ["construccion","materiales","obra","hogar","muebles"],
+    general: ["negocio","empresa","servicios","comercial","mexico","mx"]
+  };
+  var LAUDATORY = ["mejor","super","premium","original","natural","express","plus","mega","ultra","pro",
+    "facil","rapido","calidad","nuevo","nueva","gold","top","max","total","real","genuino"];
+
+  function grupoDeClase(n){
+    n = Number(n);
+    if ([18,25,26].indexOf(n) > -1) return 'moda';
+    if ([29,30,31,32,33,43].indexOf(n) > -1) return 'comida';
+    if ([9,38,42].indexOf(n) > -1) return 'tech';
+    if ([3,44].indexOf(n) > -1) return 'belleza';
+    if ([5,10,44].indexOf(n) > -1) return 'salud';
+    if ([6,17,19,20,37].indexOf(n) > -1) return 'construccion';
+    return 'general';
+  }
+
+  function quitarAcentos(s){
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+  function palabras(s){
+    return quitarAcentos(s.toLowerCase()).replace(/[^a-z\s]/g,' ').split(/\s+/).filter(Boolean);
+  }
+  function fonetico(s){
+    var t = quitarAcentos(s.toLowerCase()).replace(/[^a-z]/g,'');
+    t = t.replace(/ll/g,'y').replace(/y/g,'i');
+    t = t.replace(/qu/g,'k');
+    t = t.replace(/c(?=[ei])/g,'s');
+    t = t.replace(/c/g,'k');
+    t = t.replace(/z/g,'s');
+    t = t.replace(/v/g,'b');
+    t = t.replace(/h/g,'');
+    t = t.replace(/rr/g,'r');
+    t = t.replace(/([a-z])\1+/g,'$1');
+    return t;
+  }
+  function levenshtein(a,b){
+    var m = a.length, n = b.length;
+    var d = [];
+    for (var i=0;i<=m;i++){ d[i]=[i]; }
+    for (var j=0;j<=n;j++){ d[0][j]=j; }
+    for (i=1;i<=m;i++){
+      for (j=1;j<=n;j++){
+        var cost = a[i-1]===b[j-1] ? 0 : 1;
+        d[i][j] = Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+cost);
+      }
+    }
+    return d[m][n];
+  }
+
+  function evaluarDistintividad(nombre, grupo){
+    var ws = palabras(nombre);
+    var generic = GENERIC_BY_GROUP[grupo] || [];
+    var hitsGeneric = ws.filter(function(w){ return generic.indexOf(w) > -1; });
+    var hitsLaud = ws.filter(function(w){ return LAUDATORY.indexOf(w) > -1; });
+    if (hitsGeneric.length && ws.length <= hitsGeneric.length + 1){
+      return {tipo:'generica', hitsGeneric:hitsGeneric, hitsLaud:hitsLaud};
+    }
+    if (hitsGeneric.length || hitsLaud.length){
+      return {tipo:'descriptiva', hitsGeneric:hitsGeneric, hitsLaud:hitsLaud};
+    }
+    return {tipo:'fantasia', hitsGeneric:hitsGeneric, hitsLaud:hitsLaud};
+  }
+
+  function analizarSimilares(nombre, texto){
+    var candidatos = texto.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    var base = fonetico(nombre);
+    return candidatos.map(function(c){
+      var f = fonetico(c);
+      var dist = levenshtein(base, f);
+      var maxLen = Math.max(base.length, f.length, 1);
+      var sim = 1 - dist/maxLen;
+      return {nombre:c, similitud:sim};
+    }).sort(function(a,b){ return b.similitud - a.similitud; });
+  }
+
+  function renderResultado(nivel, motivos, recomendaciones, similares){
+    var stamp = document.getElementById('stamp');
+    var stampText = document.getElementById('stamp-text');
+    var title = document.getElementById('verdict-title');
+    var sub = document.getElementById('verdict-sub');
+    stamp.className = 'stamp ' + nivel;
+    stampText.textContent = nivel.toUpperCase();
+
+    var titles = {alta:'Probabilidad alta', media:'Probabilidad media', baja:'Probabilidad baja'};
+    var subs = {
+      alta:'No se detectaron señales fuertes de conflicto con las reglas generales de distintividad.',
+      media:'Hay elementos que un examinador del IMPI podría objetar. Vale la pena ajustar antes de presentar.',
+      baja:'Se detectaron señales claras de riesgo (nombre genérico/descriptivo o muy parecido a otro).'
+    };
+    title.textContent = titles[nivel];
+    sub.textContent = subs[nivel];
+
+    var findingsList = document.getElementById('findings-list');
+    findingsList.innerHTML = '';
+    motivos.forEach(function(m){
+      var li = document.createElement('li'); li.textContent = m; findingsList.appendChild(li);
+    });
+
+    var recsList = document.getElementById('recs-list');
+    recsList.innerHTML = '';
+    recomendaciones.forEach(function(r){
+      var li = document.createElement('li'); li.textContent = r; recsList.appendChild(li);
+    });
+
+    var wrap = document.getElementById('similares-wrap');
+    wrap.innerHTML = '';
+    if (similares && similares.length){
+      var h = document.createElement('h3'); h.style.fontSize='1rem'; h.textContent = 'Comparación con los nombres que pegaste';
+      var table = document.createElement('table'); table.className = 'similares';
+      table.innerHTML = '<tr><th>Nombre</th><th>Parecido aproximado</th></tr>';
+      similares.forEach(function(s){
+        var nivelDot = s.similitud >= 0.8 ? 'alta' : (s.similitud >= 0.6 ? 'media' : 'baja');
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td><span class="dot ' + nivelDot + '"></span>' + s.nombre + '</td><td>' + Math.round(s.similitud*100) + '%</td>';
+        table.appendChild(tr);
+      });
+      wrap.appendChild(h);
+      wrap.appendChild(table);
+    }
+
+    document.getElementById('resultado').classList.add('show');
+    document.getElementById('resultado').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  document.getElementById('form-evaluar').addEventListener('submit', function(e){
+    e.preventDefault();
+    var nombre = document.getElementById('in-nombre').value.trim();
+    var clase = selClase.value;
+    var similaresTexto = document.getElementById('in-similares').value;
+    if (!nombre) return;
+
+    var grupo = grupoDeClase(clase);
+    var dist = evaluarDistintividad(nombre, grupo);
+    var similares = analizarSimilares(nombre, similaresTexto);
+    var riesgosAltos = similares.filter(function(s){ return s.similitud >= 0.8; });
+    var riesgosMedios = similares.filter(function(s){ return s.similitud >= 0.6 && s.similitud < 0.8; });
+
+    var nivel, motivos = [], recomendaciones = [];
+
+    if (dist.tipo === 'generica' || riesgosAltos.length){
+      nivel = 'baja';
+    } else if (dist.tipo === 'descriptiva' || riesgosMedios.length){
+      nivel = 'media';
+    } else {
+      nivel = 'alta';
+    }
+
+    if (dist.tipo === 'generica'){
+      motivos.push('El nombre está compuesto casi por completo de palabras genéricas del giro que elegiste (' + dist.hitsGeneric.join(', ') + '). El Art. 173 de la LFPPI no permite registrar términos técnicos o de uso común del propio producto o servicio.');
+      recomendaciones.push('Combina la palabra genérica con un término inventado o distintivo, o cámbiala por completo.');
+    } else if (dist.tipo === 'descriptiva'){
+      if (dist.hitsGeneric.length) motivos.push('El nombre incluye una palabra relacionada directamente con tu giro (' + dist.hitsGeneric.join(', ') + '), lo que puede considerarse descriptivo.');
+      if (dist.hitsLaud.length) motivos.push('El nombre incluye una palabra elogiosa (' + dist.hitsLaud.join(', ') + '). Palabras como "premium" o "mejor" rara vez aportan distintividad por sí solas.');
+      recomendaciones.push('Considera acompañar el nombre de un elemento gráfico distintivo (marca mixta) para reforzar el registro.');
+      recomendaciones.push('Evalúa si puedes acreditar uso previo y reconocimiento del nombre en el mercado (distintividad adquirida).');
+    } else {
+      motivos.push('El nombre no coincide con palabras genéricas ni descriptivas típicas de tu giro: esto favorece su distintividad.');
+    }
+
+    if (riesgosAltos.length){
+      motivos.push('Encontramos ' + riesgosAltos.length + ' nombre(s) muy parecido(s) fonéticamente entre los que pegaste, lo que puede generar una negativa por semejanza en grado de confusión.');
+      recomendaciones.push('Revisa directamente en MARCANET el estatus de esos registros antes de presentar tu solicitud.');
+      recomendaciones.push('Si el parecido es alto, considera cambiar el nombre o acotarlo a una clase/descripción distinta de la de esos registros.');
+    } else if (riesgosMedios.length){
+      motivos.push('Hay ' + riesgosMedios.length + ' nombre(s) con un parecido moderado. Conviene revisarlos con más detalle.');
+      recomendaciones.push('Pide una búsqueda fonética formal a un agente de propiedad industrial para confirmar el nivel real de riesgo.');
+    } else if (similaresTexto.trim()){
+      motivos.push('Ningún nombre de los que pegaste resultó fonéticamente parecido.');
+    } else {
+      recomendaciones.push('Usa el paso 1 para buscar el nombre en el sitio del IMPI y pega aquí lo que encuentres, para un análisis más completo.');
+    }
+
+    recomendaciones.push('Antes de presentar la solicitud, confirma con un agente de la propiedad industrial certificado.');
+
+    renderResultado(nivel, motivos, recomendaciones, similares.length ? similares : null);
+  });
+
+  /* ============ ANÁLISIS CON IA (opcional, llamada directa a Anthropic) ============ */
+  var KEY_STORAGE = 'msmx_anthropic_key';
+  var inApiKey = document.getElementById('in-apikey');
+  var savedKey = localStorage.getItem(KEY_STORAGE);
+  if (savedKey) inApiKey.value = savedKey;
+  inApiKey.addEventListener('change', function(){
+    if (inApiKey.value.trim()) localStorage.setItem(KEY_STORAGE, inApiKey.value.trim());
+    else localStorage.removeItem(KEY_STORAGE);
+  });
+
+  document.getElementById('btn-ia').addEventListener('click', function(){
+    var key = inApiKey.value.trim();
+    var status = document.getElementById('ai-status');
+    var out = document.getElementById('ai-output');
+    var nombre = document.getElementById('in-nombre').value.trim();
+    var clase = selClase.value;
+    var claseLabel = selClase.options[selClase.selectedIndex] ? selClase.options[selClase.selectedIndex].textContent : '';
+    var desc = document.getElementById('in-desc').value.trim();
+
+    if (!key){ status.textContent = 'Escribe tu API key de Anthropic arriba primero.'; return; }
+    if (!nombre){ status.textContent = 'Ve al paso 2 y escribe el nombre de la marca primero.'; return; }
+
+    status.textContent = 'Generando análisis… esto puede tardar unos segundos.';
+    out.classList.remove('show'); out.textContent = '';
+
+    var systemPrompt = 'Eres un asistente especializado en propiedad industrial en México (LFPPI, IMPI). ' +
+      'Busca en la web si existen marcas idénticas o similares a la propuesta, en la clase de Niza indicada o clases relacionadas. ' +
+      'Responde SIEMPRE en español y en texto plano con estas secciones, en este orden: ' +
+      '"RESUMEN", "COINCIDENCIAS ENCONTRADAS" (lista, con fuente si la tienes), "ANÁLISIS DE DISTINTIVIDAD Y SIMILITUD", ' +
+      '"PROBABILIDAD DE REGISTRO" (Alta / Media / Baja, con justificación breve) y "RECOMENDACIONES" (lista accionable). ' +
+      'Aclara que esto no sustituye una búsqueda oficial en MARCANET ni asesoría de un agente de propiedad industrial certificado.';
+
+    var userPrompt = 'Marca a evaluar: "' + nombre + '"\n' +
+      'Clase de Niza: ' + claseLabel + '\n' +
+      'Descripción de productos o servicios: ' + (desc || '(no proporcionada)');
+
+    // NOTA: este header habilita llamadas directas desde el navegador. Expone tu key en el tráfico
+    // de red de TU navegador (no la de otros visitantes). Revisa docs.claude.com/en/api antes de
+    // usar esto en producción con muchos usuarios; para eso conviene un backend/proxy propio.
+    fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-5', // revisa docs.claude.com/en/docs/about-claude/models por si cambia el identificador
+        max_tokens: 1600,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }],
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }]
+      })
+    })
+    .then(function(r){
+      if (!r.ok) return r.text().then(function(t){ throw new Error('HTTP ' + r.status + ': ' + t); });
+      return r.json();
+    })
+    .then(function(data){
+      var text = (data.content || [])
+        .filter(function(block){ return block.type === 'text'; })
+        .map(function(block){ return block.text; })
+        .join('\n\n');
+      out.textContent = text || 'No se recibió texto en la respuesta.';
+      out.classList.add('show');
+      status.textContent = '';
+    })
+    .catch(function(err){
+      status.textContent = 'No se pudo generar el análisis. Si el error menciona CORS, tu key necesita un backend/proxy propio en vez de una llamada directa desde el navegador. Detalle: ' + err.message;
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
