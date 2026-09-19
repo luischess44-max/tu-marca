@@ -216,18 +216,21 @@
       </div>
 
       <div class="tab-panel active" id="panel-buscar" role="tabpanel" aria-labelledby="tab-buscar">
-        <p>Escribe el nombre que quieres registrar y revisa si ya aparece en el sitio del IMPI o en la Gaceta de la Propiedad Industrial.</p>
-        <div class="gcse-box">
-          <!--
-            Crea gratis un "Programmable Search Engine" en https://programmablesearchengine.google.com,
-            limítalo a los sitios impi.gob.mx y gaceta.impi.gob.mx, copia tu "cx" y pégalo abajo
-            reemplazando TU_CX_AQUI (en las dos líneas marcadas).
-          -->
-          <div class="gcse-searchbox-only" data-resultsUrl="#panel-buscar" data-newWindow="true"></div>
+        <p>El buscador de marcas del IMPI (MARCia) es una aplicación privada que Google no puede indexar, así que un buscador embebido aquí nunca mostraría resultados reales. Lo confiable es abrir la herramienta oficial y buscar ahí directamente — te dejamos el nombre listo para pegar.</p>
+        <div class="field">
+          <label for="in-nombre-buscar">Nombre de la marca a buscar</label>
+          <input type="text" id="in-nombre-buscar" placeholder="Ej. Lunaria">
         </div>
-        <div class="gcse-searchresults-only" style="margin-top:12px;"></div>
-        <script async src="https://cse.google.com/cse.js?cx=TU_CX_AQUI"></script>
-        <p class="hint">Este buscador manda tu consulta a Google, acotada a los dominios que configures. No pasa por ningún servidor de Marca Segura MX.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;">
+          <button type="button" class="btn btn-ghost" id="btn-copiar-nombre">Copiar nombre</button>
+          <span class="hint" id="copiar-status" style="align-self:center;"></span>
+        </div>
+        <div class="gcse-box" style="display:flex; flex-direction:column; gap:10px;">
+          <a class="btn btn-primary" style="text-align:center;" href="https://marcia.impi.gob.mx/marcas/search/quick" target="_blank" rel="noopener">Abrir MARCia — búsqueda oficial de marcas del IMPI</a>
+          <a class="btn btn-ghost" style="text-align:center;" href="https://siga.impi.gob.mx/content/common/principal.jsf" target="_blank" rel="noopener">Abrir la Gaceta de la Propiedad Industrial (SIGA)</a>
+          <a class="btn btn-ghost" style="text-align:center;" href="https://clasniza.impi.gob.mx/buscador" target="_blank" rel="noopener">Abrir ClasNiza — para confirmar tu clase de Niza</a>
+        </div>
+        <p class="hint" style="margin-top:12px;">Pega el nombre en el cuadro de búsqueda de MARCia. Si aparece algo igual o parecido, cópialo (nombre, número de expediente y estatus) y pégalo en el paso 2 para que el análisis lo tome en cuenta.</p>
       </div>
 
       <div class="tab-panel" id="panel-evaluar" role="tabpanel" aria-labelledby="tab-evaluar">
@@ -373,6 +376,31 @@
       tab.setAttribute('aria-selected','true');
       document.getElementById(tab.getAttribute('aria-controls')).classList.add('active');
     });
+  });
+
+  /* ============ PASO 1: copiar nombre y sincronizar con el paso 2 ============ */
+  var nombreBuscar = document.getElementById('in-nombre-buscar');
+  document.getElementById('btn-copiar-nombre').addEventListener('click', function(){
+    var val = nombreBuscar.value.trim();
+    var status = document.getElementById('copiar-status');
+    if (!val){ status.textContent = 'Escribe un nombre primero.'; return; }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(val).then(function(){
+        status.textContent = 'Copiado. Pégalo en el buscador de MARCia.';
+      }).catch(function(){
+        status.textContent = 'No se pudo copiar automáticamente; selecciona el texto y cópialo manualmente.';
+      });
+    } else {
+      status.textContent = 'Selecciona el texto y cópialo manualmente (Ctrl/Cmd+C).';
+    }
+  });
+
+  var nombreEvaluar = document.getElementById('in-nombre');
+  nombreBuscar.addEventListener('input', function(){
+    if (nombreEvaluar.value !== nombreBuscar.value) nombreEvaluar.value = nombreBuscar.value;
+  });
+  nombreEvaluar.addEventListener('input', function(){
+    if (nombreBuscar.value !== nombreEvaluar.value) nombreBuscar.value = nombreEvaluar.value;
   });
 
   /* ============ CLASES DE NIZA ============ */
